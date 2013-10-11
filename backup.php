@@ -1,8 +1,11 @@
 <?php
-define('BASE_DIR', dirname(__FILE__));
 define('DIRECTORY_MASK', 0777);
 
-require_once BASE_DIR . '/backup.class.php';
+set_include_path(__DIR__);
+spl_autoload_extensions('.class.php');
+spl_autoload_register();
+
+use Skywebro\Backup\Backup;
 
 $exit_code = 0;
 $ini = getopt('i:')['i'];
