@@ -15,7 +15,7 @@ try {
 } catch (Exception $e) {
     $color = (2 == $e->getCode()) ? "0;32" : "01;31";
     print "\033[{$color}m" . $e->getMessage() . "!\033[0m\n";
-    $exit_code = 1;
+    $exit_code = $e->getCode();
 }
 
 exit($exit_code);

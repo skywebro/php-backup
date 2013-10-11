@@ -60,7 +60,7 @@ class Backup {
 
     protected function checkFile($name) {
         if (!is_file($name) || !is_readable($name)) {
-            throw new Exception("$name is not a file or it's not readable");
+            throw new Exception("$name does not exist or it's not readable");
         }
     }
 
