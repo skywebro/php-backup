@@ -1,7 +1,6 @@
 <?php
 define('DIRECTORY_MASK', 0777);
 
-set_include_path(__DIR__);
 spl_autoload_extensions('.class.php');
 spl_autoload_register();
 
