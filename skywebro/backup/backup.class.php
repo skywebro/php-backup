@@ -12,6 +12,10 @@ class Backup {
     protected $destinationPath = '';
 
     public static function factory($iniPath) {
+        if (empty($iniPath)) {
+            throw new Exception("Usage: backup -i ini_file");
+        }
+
         self::checkFile($iniPath);
 
         if (!(self::$instances[$name = md5($iniPath)] instanceof Backup)) {

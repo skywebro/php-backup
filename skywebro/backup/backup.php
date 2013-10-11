@@ -7,19 +7,14 @@ spl_autoload_register();
 use Skywebro\Backup\Backup;
 
 $exit_code = 0;
-$ini = getopt('i:')['i'];
+$options = getopt('i:');
 
-if (empty($ini)) {
-    print "Usage: backup -i ini_file\n";
+try {
+    $backup = Backup::factory($options['i']);
+    $backup->run();
+} catch (Exception $e) {
+    print "\033[01;31mERROR: " . $e->getMessage() . "!\033[0m\n";
     $exit_code = 1;
-} else {
-    try {
-        $backup = Backup::factory($ini);
-        $backup->run();
-    } catch (Exception $e) {
-        print 'ERROR: ' . $e->getMessage() . "!\n";
-        $exit_code = 2;
-    }
 }
 
 exit($exit_code);
