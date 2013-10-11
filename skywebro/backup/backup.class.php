@@ -13,7 +13,7 @@ class Backup {
 
     public static function factory($iniPath) {
         if (empty($iniPath)) {
-            throw new Exception("Usage: backup -i ini_file", 2);
+            throw new Exception("Usage: backup -i ini_file", 1);
         }
 
         self::checkFile($iniPath);
