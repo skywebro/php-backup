@@ -1,0 +1,6 @@
+#!/bin/sh
+
+PHP="/usr/bin/php"
+INCDIR=`dirname $0`
+
+exec $PHP -C -n -d date.timezone=UTC -d include_path=$INCDIR -d output_buffering=1 -d variables_order=EGPCS -d safe_mode=0 -d register_argc_argv="On" $INCDIR/backup.php "$@"
