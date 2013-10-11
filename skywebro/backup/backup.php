@@ -13,7 +13,8 @@ try {
     $backup = Backup::factory($options['i']);
     $backup->run();
 } catch (Exception $e) {
-    print "\033[01;31mERROR: " . $e->getMessage() . "!\033[0m\n";
+    $color = (2 == $e->getCode()) ? "0;32" : "01;31";
+    print "\033[{$color}m" . $e->getMessage() . "!\033[0m\n";
     $exit_code = 1;
 }
 
