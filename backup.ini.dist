@@ -1,5 +1,7 @@
 [paths]
-hosts = /home/andi/metanet/hosts
 wget = /usr/bin/wget
 logs = /home/andi/metanet/logs/
 destination = /home/andi/metanet/dumps/
+
+[hosts]
+hosts1 = /home/andi/metanet/hosts
