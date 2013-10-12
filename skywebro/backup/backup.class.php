@@ -42,10 +42,29 @@ class Backup {
         if (!($ini = @parse_ini_file($this->iniPath, true))) {
             throw new Exception('Could not parse the ini file');
         }
+
+        $this->validateIni($ini);
+
         $this->logsPath = $ini['paths']['logs'];
         $this->wgetPath = $ini['paths']['wget'];
         $this->hostsPath = $ini['paths']['hosts'];
         $this->destinationPath = $ini['paths']['destination'];
+    }
+
+    protected function validateIni($ini) {
+        static $values = array('logs', 'wget', 'hosts', 'destination');
+
+        if (!is_array($ini['paths'])) {
+            throw new Exception('The [paths] section is not defined in the ini file');
+        }
+
+        foreach($values as $value) {
+            if (!array_key_exists($value, $ini['paths'])) {
+                throw new Exception("{$value} is not defined in the ini file");
+            }
+        }
+
+        return true;
     }
 
     protected function mkdir($dir) {
