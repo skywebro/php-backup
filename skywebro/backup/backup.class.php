@@ -8,8 +8,10 @@ class Backup {
     protected $iniFile = '';
     protected $logsPath = '';
     protected $wgetPath = '';
+    protected $mysqldumpPath = '';
     protected $hosts = array();
     protected $destinationPath = '';
+    protected $outputPath = '';
 
     public static function factory($iniFile) {
         if (empty($iniFile)) {
@@ -28,12 +30,38 @@ class Backup {
     }
 
     public function run() {
+        foreach ($this->hosts as $hostsFile) {
+            if (false !== ($handle = fopen($hostsFile, "r"))) {
+                while (false !== ($data = fgetcsv($handle, 1024, ","))) {
+                    $cfg = array(
+                        'ftpHost' => $data[0],
+                        'ftpUsername' => $data[1],
+                        'ftpPassword' => $data[2],
+                        'mysqlHost' => $data[0],
+                        'mysqlDatabase' => $data[3],
+                        'mysqlUser' => $data[4],
+                        'mysqlPassword' => $data[5],
+                        'logsPath' => $this->logsPath,
+                        'outputPath' => $this->outputPath,
+                        'destinationPath' => $this->destinationPath,
+                        'wgetPath' => $this->wgetPath,
+                        'mysqldumpPath' => $this->mysqldumpPath,
+                    );
+                    $task = new Task($cfg);
+                    $task->run();
+                }
+                fclose($handle);
+            }
+        }
     }
 
     protected function prepare() {
         $this->ini();
         $this->mkdir($this->logsPath);
         $this->mkdir($this->destinationPath);
+
+        $this->outputPath = $this->destinationPath . '/' . date("Ymd");
+        $this->mkdir($this->outputPath);
     }
 
     protected function ini() {
@@ -45,6 +73,7 @@ class Backup {
 
         $this->logsPath = $ini['paths']['logs'];
         $this->wgetPath = $ini['paths']['wget'];
+        $this->mysqldumpPath = $ini['paths']['mysqldump'];
         $this->destinationPath = $ini['paths']['destination'];
 
         foreach($ini['hosts'] as $hosts) {
@@ -54,7 +83,7 @@ class Backup {
     }
 
     protected function validate($ini) {
-        static $values = array('logs', 'wget', 'destination');
+        static $values = array('logs', 'wget', 'mysqldump', 'destination');
 
         if (!is_array($ini['hosts'])) {
             throw new Exception('The [hosts] section is not defined in the ini file');
@@ -71,6 +100,7 @@ class Backup {
         }
 
         $this->checkFile($ini['paths']['wget']) && $this->checkExecutable($ini['paths']['wget']);
+        $this->checkFile($ini['paths']['mysqldump']) && $this->checkExecutable($ini['paths']['mysqldump']);
 
         return true;
     }

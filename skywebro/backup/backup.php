@@ -1,5 +1,5 @@
 <?php
-define('DIRECTORY_MASK', 0777);
+define('DIRECTORY_MASK', 0755);
 
 spl_autoload_extensions('.class.php');
 spl_autoload_register();
@@ -15,10 +15,10 @@ try {
     $backup->run();
 } catch (Skywebro\Backup\Exception $e) {
     $exitCode = $e->getCode();
-    print "\033[{$consoleColors[$exitCode]}m" . $e->getMessage() . "\033[0m\n";
+    print "\033[{$consoleColors[$exitCode]}m" . $e->getMessage() . "\033[0m\n"; //color based on the error code
 } catch (Exception $e) {
     $exitCode = 3;
-    print "\033[01;31m" . $e->getMessage() . "\033[0m\n";
+    print "\033[{$consoleColors[2]}m" . $e->getMessage() . "\033[0m\n"; //always red
 }
 
 exit($exitCode);
