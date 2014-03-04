@@ -4,7 +4,7 @@ define('DIRECTORY_MASK', 0755);
 spl_autoload_extensions('.class.php');
 spl_autoload_register();
 
-use Skywebro\Backup\Backup;
+use Impavidly\Backup\Backup;
 
 $exitCode = 0;
 $options = getopt('i:');

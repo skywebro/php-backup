@@ -1,5 +1,5 @@
 <?php
-namespace Skywebro\Backup;
+namespace Impavidly\Backup;
 
 set_time_limit(0);
 
