@@ -1,8 +1,8 @@
 <?php
-namespace Impavidly\Backup;
+namespace Org\Impavidly\Backup;
 
-use Impavidly\Backup\Observers\Wget;
-use Impavidly\Backup\Observers\MysqlDump;
+use Org\Impavidly\Backup\Observers\Wget;
+use Org\Impavidly\Backup\Observers\MysqlDump;
 
 class Task implements \SplSubject {
     protected $observers = array();

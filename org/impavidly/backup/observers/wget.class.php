@@ -1,5 +1,5 @@
 <?php
-namespace Impavidly\Backup\Observers;
+namespace Org\Impavidly\Backup\Observers;
 
 class Wget implements \SplObserver {
     public function update(\SplSubject $subject) {

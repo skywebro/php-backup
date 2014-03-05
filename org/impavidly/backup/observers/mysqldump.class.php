@@ -1,5 +1,5 @@
 <?php
-namespace Impavidly\Backup\Observers;
+namespace Org\Impavidly\Backup\Observers;
 
 class MysqlDump implements \SplObserver {
     public function update(\SplSubject $subject) {
