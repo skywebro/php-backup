@@ -1,5 +1,5 @@
 <?php
-namespace Impavidly\Backup;
+namespace Org\Impavidly\Backup;
 
 set_time_limit(0);
 

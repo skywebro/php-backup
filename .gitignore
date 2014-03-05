@@ -1,4 +1,7 @@
 .idea
 hosts
 backup.ini
+dumps
+logs
+
 
