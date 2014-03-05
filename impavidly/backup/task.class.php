@@ -1,36 +1,39 @@
 <?php
 namespace Impavidly\Backup;
 
-class Task {
+use Impavidly\Backup\Observers\Wget;
+use Impavidly\Backup\Observers\MysqlDump;
+
+class Task implements \SplSubject {
+    protected $observers = array();
+
     public function __construct($cfg) {
         foreach($cfg as $key => $value) {
             $this->{$key} = $value;
         }
+
+        $this->attach(new Wget());
+        $this->attach(new MysqlDump());
+    }
+
+    public function attach(\SplObserver $observer) {
+        $this->observers[] = $observer;
+    }
+
+    public function detach(\SplObserver $observer) {
+        $key = array_search($observer, $this->observers, true);
+        if ($key) {
+            unset($this->observers[$key]);
+        }
+    }
+
+    public function notify() {
+        foreach ($this->observers as $observer) {
+            $observer->update($this);
+        }
     }
 
     public function run() {
-        $this->wget();
-        $this->mysqlDump();
-    }
-
-    protected function wget() {
-        $command = "{$this->wgetPath} --continue --mirror --directory-prefix={$this->destinationPath} ftp://{$this->ftpUsername}:{$this->ftpPassword}@{$this->ftpHost}/httpdocs/ 2> {$this->logsPath}/{$this->ftpHost}.log";
-        system($command, $status);
-        /*
-        if (false !== ($wgetHandle = popen($command, 'r'))) {
-            if (false !== ($outputHandle = fopen("{$this->logsPath}/{$host}.log", "w+"))) {
-                while ($read = fgets($wgetHandle)) {
-                    fputs($outputHandle, $read);
-                }
-                fclose($outputHandle);
-            }
-            pclose($wgetHandle);
-        }
-        */
-    }
-
-    protected function mysqlDump() {
-        $command = "{$this->mysqldumpPath} -h {$this->mysqlHost} -u {$this->mysqlUser} --password={$this->mysqlPassword} {$this->mysqlDatabase} > {$this->outputPath}/{$this->mysqlHost}_{$this->mysqlDatabase}.sql";
-        system($command, $status);
+        $this->notify();
     }
 }

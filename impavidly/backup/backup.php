@@ -13,7 +13,7 @@ $consoleColors = array(1 => "0;32", 2 => "01;31"); //green and red
 try {
     $backup = Backup::factory($options['i']);
     $backup->run();
-} catch (Skywebro\Backup\Exception $e) {
+} catch (Impavidly\Backup\Exception $e) {
     $exitCode = $e->getCode();
     print "\033[{$consoleColors[$exitCode]}m" . $e->getMessage() . "\033[0m\n"; //color based on the error code
 } catch (Exception $e) {
