@@ -36,7 +36,7 @@ class Task implements \SplSubject {
                     throw new Fork_Exception('Could not fork the task in the background.');
                 } elseif (0 == $pid) {
                     //in the child, update the observer
-                    $status = $observer->update($this);
+                    $status = $observer->update($this); //throws Fail_Exception
                     exit($status);
                 } else {
                     //in the parent, do nothing

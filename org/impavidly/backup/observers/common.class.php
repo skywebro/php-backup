@@ -8,7 +8,7 @@ class Common implements \SplObserver {
     protected $name = '';
 
     public function update(\SplSubject $subject) {
-        throw new BackupException("Not implemented.");
+        throw new BackupException('Not implemented.');
     }
 
     public function execute(\SplSubject $subject, $command) {
