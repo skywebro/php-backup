@@ -1,7 +1,6 @@
 <?php
 namespace Org\Impavidly\Backup;
 
-use Org\Impavidly\Backup\Exceptions\Exception;
 use Org\Impavidly\Backup\Observers\Wget as WgetObserver;
 use Org\Impavidly\Backup\Observers\MysqlDump as MysqlDumpObserver;
 use Org\Impavidly\Backup\Exceptions\Fork_Exception;
@@ -43,12 +42,12 @@ class Task implements \SplSubject {
                     //in the parent, do nothing
                 }
             } catch (Fork_Exception $e) {
-                //run the observer inside the main process
+                //fork failed so run the observer inside the main process
                 $observer->update($this);
             } catch (Fail_Exception $e) {
                 //the observer failed to update, still in child process, exiting
                 print $e->getMessage() . "\n";
-                exit(1);
+                exit($e->getCode());
             }
         }
 

@@ -1,7 +1,6 @@
 <?php
 namespace Org\Impavidly\Backup;
 
-use Org\Impavidly\Backup\Logger;
 use Org\Impavidly\Backup\Exceptions\Exception as BackupException;
 
 set_time_limit(0);
