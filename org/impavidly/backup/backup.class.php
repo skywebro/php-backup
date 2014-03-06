@@ -1,6 +1,9 @@
 <?php
 namespace Org\Impavidly\Backup;
 
+use Org\Impavidly\Backup\Logger;
+use Org\Impavidly\Backup\Exceptions\Exception as BackupException;
+
 set_time_limit(0);
 
 class Backup {
@@ -13,10 +16,11 @@ class Backup {
     protected $destinationPath = '';
     protected $outputPath = '';
     protected $retries = 3;
+    protected $logger = null;
 
     public static function factory($iniFile) {
         if (empty($iniFile)) {
-            throw new Exception("Usage: backup -i ini_file", 1);
+            throw new BackupException("Usage: backup -i ini_file", 1);
         }
 
         self::checkFile($iniFile);
@@ -25,6 +29,7 @@ class Backup {
             self::$instances[$name] = new Backup();
             self::$instances[$name]->iniFile = $iniFile;
             self::$instances[$name]->prepare();
+            self::$instances[$name]->logger = Logger::getLogger('backup');
         }
 
         return self::$instances[$name];
@@ -32,6 +37,7 @@ class Backup {
 
     public function run() {
         foreach ($this->hosts as $hostsFile) {
+            $lineNumber = 1;
             if (false !== ($handle = fopen($hostsFile, "r"))) {
                 while (false !== ($data = fgetcsv($handle, 1024, ","))) {
                     $cfg = array(
@@ -49,6 +55,9 @@ class Backup {
                         'wgetPath' => $this->wgetPath,
                         'mysqlDumpPath' => $this->mysqlDumpPath,
                         'retries' => $this->retries,
+                        'logger' => $this->logger,
+                        'hostsFile' => $hostsFile,
+                        'lineNumber' => $lineNumber++,
                     );
                     $task = new Task($cfg);
                     $task->run();
@@ -69,7 +78,7 @@ class Backup {
 
     protected function ini() {
         if (!($ini = @parse_ini_file($this->iniFile, true))) {
-            throw new Exception('Could not parse the ini file');
+            throw new BackupException('Could not parse the ini file');
         }
 
         $this->validate($ini);
@@ -90,16 +99,16 @@ class Backup {
         static $values = array('logs', 'wget', 'mysqldump', 'destination');
 
         if (!is_array($ini['hosts'])) {
-            throw new Exception('The [hosts] section is not defined in the ini file');
+            throw new BackupException('The [hosts] section is not defined in the ini file');
         }
 
         if (!is_array($ini['paths'])) {
-            throw new Exception('The [paths] section is not defined in the ini file');
+            throw new BackupException('The [paths] section is not defined in the ini file');
         }
 
         foreach($values as $value) {
             if (!array_key_exists($value, $ini['paths'])) {
-                throw new Exception("{$value} is not defined in the ini file");
+                throw new BackupException("{$value} is not defined in the ini file");
             }
         }
 
@@ -112,22 +121,22 @@ class Backup {
     protected function mkdir($dir) {
         if (is_dir($dir)) {
             if (!is_writable($dir)) {
-                throw new Exception("$dir is not writable");
+                throw new BackupException("$dir is not writable");
             }
         } elseif (!@mkdir($dir, DIRECTORY_MASK, true)) {
-            throw new Exception("Could not create $dir");
+            throw new BackupException("Could not create $dir");
         }
     }
 
     protected function checkFile($name) {
         if (!is_file($name) || !is_readable($name)) {
-            throw new Exception("$name does not exist or it's not readable");
+            throw new BackupException("$name does not exist or it's not readable");
         }
     }
 
     protected function checkExecutable($cmd) {
         if (!is_executable($this->wgetPath)) {
-            throw new Exception("$cmd is not executable");
+            throw new BackupException("$cmd is not executable");
         }
     }
 }
