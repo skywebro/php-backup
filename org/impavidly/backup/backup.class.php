@@ -8,10 +8,11 @@ class Backup {
     protected $iniFile = '';
     protected $logsPath = '';
     protected $wgetPath = '';
-    protected $mysqldumpPath = '';
+    protected $mysqlDumpPath = '';
     protected $hosts = array();
     protected $destinationPath = '';
     protected $outputPath = '';
+    protected $retries = 3;
 
     public static function factory($iniFile) {
         if (empty($iniFile)) {
@@ -37,15 +38,17 @@ class Backup {
                         'ftpHost' => $data[0],
                         'ftpUsername' => $data[1],
                         'ftpPassword' => $data[2],
-                        'mysqlHost' => $data[0],
-                        'mysqlDatabase' => $data[3],
-                        'mysqlUser' => $data[4],
-                        'mysqlPassword' => $data[5],
+                        'ftpPath' => $data[3],
+                        'mysqlHost' => $data[4],
+                        'mysqlDatabase' => $data[5],
+                        'mysqlUser' => $data[6],
+                        'mysqlPassword' => $data[7],
                         'logsPath' => $this->logsPath,
                         'outputPath' => $this->outputPath,
                         'destinationPath' => $this->destinationPath,
                         'wgetPath' => $this->wgetPath,
-                        'mysqldumpPath' => $this->mysqldumpPath,
+                        'mysqlDumpPath' => $this->mysqlDumpPath,
+                        'retries' => $this->retries,
                     );
                     $task = new Task($cfg);
                     $task->run();
@@ -73,8 +76,9 @@ class Backup {
 
         $this->logsPath = $ini['paths']['logs'];
         $this->wgetPath = $ini['paths']['wget'];
-        $this->mysqldumpPath = $ini['paths']['mysqldump'];
+        $this->mysqlDumpPath = $ini['paths']['mysqldump'];
         $this->destinationPath = $ini['paths']['destination'];
+        $this->retries = (int)$ini['general']['retries'];
 
         foreach($ini['hosts'] as $hosts) {
             $this->checkFile($hosts);

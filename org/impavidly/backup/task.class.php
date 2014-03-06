@@ -1,8 +1,9 @@
 <?php
 namespace Org\Impavidly\Backup;
 
-use Org\Impavidly\Backup\Observers\Wget;
-use Org\Impavidly\Backup\Observers\MysqlDump;
+use Org\Impavidly\Backup\Observers\Wget as WgetObserver;
+use Org\Impavidly\Backup\Observers\MysqlDump as MysqlDumpObserver;
+use Org\Impavidly\Backup\Observers\Fail_Exception;
 
 class Task implements \SplSubject {
     protected $observers = array();
@@ -11,9 +12,7 @@ class Task implements \SplSubject {
         foreach($cfg as $key => $value) {
             $this->{$key} = $value;
         }
-
-        $this->attach(new Wget());
-        $this->attach(new MysqlDump());
+        $this->attachObservers();
     }
 
     public function attach(\SplObserver $observer) {
@@ -30,20 +29,27 @@ class Task implements \SplSubject {
     public function notify() {
         foreach ($this->observers as $i => $observer) {
             //launch every observer of the current task in its own process
-            $pid = pcntl_fork();
-            if (-1 == $pid) {
-                throw new Exception('Could not fork the task in the background.');
-            } elseif (0 == $pid) {
-                //in the child, update the observer
-                $status = $observer->update($this);
-                exit($status);
-            } else {
-                //in the parent, do nothing
+            try {
+                $pid = pcntl_fork();
+                if (-1 == $pid) {
+                    throw new Fork_Exception('Could not fork the task in the background.');
+                } elseif (0 == $pid) {
+                    //in the child, update the observer
+                    $status = $observer->update($this);
+                    exit($status);
+                } else {
+                    //in the parent, do nothing
+                }
+            } catch (Fork_Exception $e) {
+                //run it inside the main process
+                $observer->update($this);
+            } catch (Fail_Exception $e) {
+                //the observer failed to update, printing the error message
+                print $e->getMessage() . "\n";
             }
         }
 
         //wait for the observers to finish
-        $status = 0;
         while (-1 != pcntl_waitpid(0, $status)) {
             $status = pcntl_wexitstatus($status);
         }
@@ -53,5 +59,10 @@ class Task implements \SplSubject {
 
     public function run() {
         return $this->notify();
+    }
+
+    protected function attachObservers() {
+        $this->attach(new WgetObserver());
+        $this->attach(new MysqlDumpObserver());
     }
 }

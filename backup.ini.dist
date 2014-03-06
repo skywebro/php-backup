@@ -1,3 +1,6 @@
+[general]
+retries = 3
+
 [paths]
 wget = /usr/bin/wget
 mysqldump = /usr/bin/mysqldump
