@@ -5,7 +5,7 @@ class Logger extends \Logger {
     public static function getLogger($name) {
         parent::configure(array(
             'rootLogger' => array(
-                'appenders' => array('default'),
+                'appenders' => array('default', 'console'),
             ),
             'appenders' => array(
                 'default' => array(
@@ -20,6 +20,15 @@ class Logger extends \Logger {
                         'file' => 'my.log',
                         'append' => true
                     )
+                ),
+                'console' => array(
+                    'class' => 'LoggerAppenderConsole',
+                    'layout' => array(
+                        'class' => 'LoggerLayoutPattern',
+                        'params' => array(
+                            'conversionPattern' => '%d{ISO8601} [%p]: %m %n',
+                        ),
+                    ),
                 )
             )
         ));

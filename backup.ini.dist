@@ -4,8 +4,7 @@ retries = 3
 [paths]
 wget = /usr/bin/wget
 mysqldump = /usr/bin/mysqldump
-logs = logs/
-destination = dumps/
+destination = dumps
 
 [hosts]
 hosts1 = hosts

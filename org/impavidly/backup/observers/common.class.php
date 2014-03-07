@@ -16,10 +16,10 @@ abstract class Common implements \SplObserver {
         $status = -1;
 
         do {
-            print "Executing: {$command} retry #{$retries}\n";
+            $subject->logger->info("Executing: {$command} retry #{$retries}");
             system($command, $status);
             if (0 == $status) {
-                print "Done executing: {$command}\n";
+                $subject->logger->info("Done executing: {$command}");
                 break;
             }
         } while (++$retries <= $subject->retries);

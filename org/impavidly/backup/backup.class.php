@@ -8,7 +8,6 @@ set_time_limit(0);
 class Backup {
     protected static $instances = array();
     protected $iniFile = '';
-    protected $logsPath = '';
     protected $wgetPath = '';
     protected $mysqlDumpPath = '';
     protected $hosts = array();
@@ -48,7 +47,6 @@ class Backup {
                         'mysqlDatabase' => $data[5],
                         'mysqlUser' => $data[6],
                         'mysqlPassword' => $data[7],
-                        'logsPath' => $this->logsPath,
                         'outputPath' => $this->outputPath,
                         'destinationPath' => $this->destinationPath,
                         'wgetPath' => $this->wgetPath,
@@ -60,6 +58,7 @@ class Backup {
                     );
                     $task = new Task($cfg);
                     $task->run();
+                    unset($task); //free the instance
                 }
                 fclose($handle);
             }
@@ -68,7 +67,6 @@ class Backup {
 
     protected function prepare() {
         $this->ini();
-        $this->mkdir($this->logsPath);
         $this->mkdir($this->destinationPath);
 
         $this->outputPath = $this->destinationPath . '/' . date("Ymd");
@@ -82,7 +80,6 @@ class Backup {
 
         $this->validate($ini);
 
-        $this->logsPath = $ini['paths']['logs'];
         $this->wgetPath = $ini['paths']['wget'];
         $this->mysqlDumpPath = $ini['paths']['mysqldump'];
         $this->destinationPath = $ini['paths']['destination'];
@@ -95,7 +92,7 @@ class Backup {
     }
 
     protected function validate($ini) {
-        static $values = array('logs', 'wget', 'mysqldump', 'destination');
+        static $values = array('wget', 'mysqldump', 'destination');
 
         if (!is_array($ini['hosts'])) {
             throw new BackupException('The [hosts] section is not defined in the ini file');
