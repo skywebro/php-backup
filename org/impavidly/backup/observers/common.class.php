@@ -4,8 +4,8 @@ namespace Org\Impavidly\Backup\Observers;
 use Org\Impavidly\Backup\Exceptions\Exception as BackupException;
 use Org\Impavidly\Backup\Exceptions\Fail_Exception;
 
-class Common implements \SplObserver {
-    protected $name = '';
+abstract class Common implements \SplObserver {
+    protected $name = 'Not implemented';
 
     public function update(\SplSubject $subject) {
         throw new BackupException('Not implemented.');

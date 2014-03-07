@@ -1,7 +1,7 @@
 <?php
 namespace Org\Impavidly\Backup;
 
-use Org\Impavidly\Backup\Observers\Wget as WgetObserver;
+use Org\Impavidly\Backup\Observers\Ftp as FtpObserver;
 use Org\Impavidly\Backup\Observers\MysqlDump as MysqlDumpObserver;
 use Org\Impavidly\Backup\Exceptions\Fork_Exception;
 use Org\Impavidly\Backup\Exceptions\Fail_Exception;
@@ -64,7 +64,7 @@ class Task implements \SplSubject {
     }
 
     protected function attachObservers() {
-        $this->attach(new WgetObserver());
+        $this->attach(new FtpObserver());
         $this->attach(new MysqlDumpObserver());
     }
 }
