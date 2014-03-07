@@ -2,7 +2,7 @@
 namespace Org\Impavidly\Backup;
 
 class Logger extends \Logger {
-    public static function getLogger($name) {
+    public static function getLogger($name, $path) {
         parent::configure(array(
             'rootLogger' => array(
                 'appenders' => array('default', 'console'),
@@ -17,9 +17,9 @@ class Logger extends \Logger {
                         ),
                     ),
                     'params' => array(
-                        'file' => 'my.log',
+                        'file' => "{$path}/" . strtolower($name) . ".log",
                         'append' => true
-                    )
+                    ),
                 ),
                 'console' => array(
                     'class' => 'LoggerAppenderConsole',

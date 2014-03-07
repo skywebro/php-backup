@@ -27,7 +27,7 @@ class Backup {
             self::$instances[$name] = new Backup();
             self::$instances[$name]->iniFile = $iniFile;
             self::$instances[$name]->prepare();
-            self::$instances[$name]->logger = Logger::getLogger('backup');
+            self::$instances[$name]->logger = Logger::getLogger('backup', self::$instances[$name]->outputPath);
         }
 
         return self::$instances[$name];
