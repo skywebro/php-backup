@@ -46,7 +46,7 @@ class Task implements \SplSubject {
                 $observer->update($this);
             } catch (Fail_Exception $e) {
                 //the observer failed to update, still in child process, exiting
-                print $e->getMessage() . "\n";
+                $this->logger->error($e->getMessage());
                 exit($e->getCode());
             }
         }

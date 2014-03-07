@@ -38,15 +38,22 @@ class Backup {
             $lineNumber = 1;
             if (false !== ($handle = fopen($hostsFile, "r"))) {
                 while (false !== ($data = fgetcsv($handle, 1024, ","))) {
+                    if (10 != count($data)) {
+                        $this->logger->error("Line {$lineNumber} from '{$hostsFile}' does not have 10 fields");
+                        $lineNumber++;
+                        continue;
+                    }
                     $cfg = array(
                         'ftpHost' => $data[0],
-                        'ftpUsername' => $data[1],
-                        'ftpPassword' => $data[2],
-                        'ftpPath' => $data[3],
-                        'mysqlHost' => $data[4],
-                        'mysqlDatabase' => $data[5],
-                        'mysqlUser' => $data[6],
-                        'mysqlPassword' => $data[7],
+                        'ftpPort' => $data[1],
+                        'ftpUsername' => $data[2],
+                        'ftpPassword' => $data[3],
+                        'ftpPath' => $data[4],
+                        'mysqlHost' => $data[5],
+                        'mysqlPort' => $data[6],
+                        'mysqlDatabase' => $data[7],
+                        'mysqlUser' => $data[8],
+                        'mysqlPassword' => $data[9],
                         'outputPath' => $this->outputPath,
                         'destinationPath' => $this->destinationPath,
                         'wgetPath' => $this->wgetPath,
