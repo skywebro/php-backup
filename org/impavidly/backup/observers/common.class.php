@@ -16,7 +16,7 @@ abstract class Common implements \SplObserver {
         $status = -1;
 
         do {
-            $subject->logger->info("{$this->name}: executing line #{$subject->lineNumber} from file '{$subject->hostsFile}' try #{$retries}");
+            $subject->logger->info("{$this->name}: executing line #{$subject->lineNumber} from file '{$subject->hostsFile}' retry #{$retries}");
             system($command, $status);
             if (0 == $status) {
                 $subject->logger->info("{$this->name}: done executing line #{$subject->lineNumber} from file '{$subject->hostsFile}'");

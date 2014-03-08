@@ -15,6 +15,7 @@ class Backup {
     protected $outputPath = '';
     protected $retries = 3;
     protected $logger = null;
+    protected $observers = array();
 
     public static function factory($iniFile) {
         if (empty($iniFile)) {
@@ -44,6 +45,7 @@ class Backup {
                         continue;
                     }
                     $cfg = array(
+                        'observerClasses' => $this->observers,
                         'ftpHost' => $data[0],
                         'ftpPort' => $data[1],
                         'ftpUsername' => $data[2],
@@ -91,6 +93,10 @@ class Backup {
         $this->mysqlDumpPath = $ini['paths']['mysqldump'];
         $this->destinationPath = $ini['paths']['destination'];
         $this->retries = (int)$ini['general']['retries'];
+
+        foreach($ini['observers'] as $name => $class) {
+            $this->observers[$name] = $class;
+        }
 
         foreach($ini['hosts'] as $hosts) {
             $this->checkFile($hosts);

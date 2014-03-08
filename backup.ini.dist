@@ -6,5 +6,9 @@ wget = /usr/bin/wget
 mysqldump = /usr/bin/mysqldump
 destination = dumps
 
+[observers]
+ftp = Org\Impavidly\Backup\Observers\Ftp
+mysqldump = Org\Impavidly\Backup\Observers\MysqlDump
+
 [hosts]
 hosts1 = hosts

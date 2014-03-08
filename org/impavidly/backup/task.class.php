@@ -1,8 +1,6 @@
 <?php
 namespace Org\Impavidly\Backup;
 
-use Org\Impavidly\Backup\Observers\Ftp as FtpObserver;
-use Org\Impavidly\Backup\Observers\MysqlDump as MysqlDumpObserver;
 use Org\Impavidly\Backup\Exceptions\Fork_Exception;
 use Org\Impavidly\Backup\Exceptions\Fail_Exception;
 
@@ -64,7 +62,12 @@ class Task implements \SplSubject {
     }
 
     protected function attachObservers() {
-        $this->attach(new FtpObserver());
-        $this->attach(new MysqlDumpObserver());
+        foreach($this->observerClasses as $name => $class) {
+            if (class_exists($class)) {
+                $this->attach($observer = new $class());
+            } else {
+                $this->logger->error("Class '{$class}' was not found, skipping.");
+            }
+        }
     }
 }
