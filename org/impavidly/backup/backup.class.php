@@ -71,6 +71,8 @@ class Backup {
                     unset($task); //free the instance
                 }
                 fclose($handle);
+            } else {
+                $this->logger->error("Could not process the hosts file {$hostsFile}.");
             }
         }
     }
