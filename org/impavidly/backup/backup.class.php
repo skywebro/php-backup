@@ -27,7 +27,6 @@ class Backup {
 
         if (!(self::$instances[$name = md5($iniFile)] instanceof Backup)) {
             self::$instances[$name] = new Backup();
-            self::$instances[$name]->logger = Logger::getLogger('backup', self::$instances[$name]->outputPath);
             self::$instances[$name]->iniFile = $iniFile;
             self::$instances[$name]->prepare();
         }
@@ -79,10 +78,6 @@ class Backup {
 
     protected function prepare() {
         $this->ini();
-        $this->mkdir($this->destinationPath);
-
-        $this->outputPath = $this->destinationPath . '/' . date("Ymd");
-        $this->mkdir($this->outputPath);
     }
 
     protected function ini() {
@@ -95,8 +90,14 @@ class Backup {
         $this->wgetPath = $ini['paths']['wget'];
         $this->mysqlDumpPath = $ini['paths']['mysqldump'];
         $this->destinationPath = $ini['paths']['destination'];
+        $this->outputPath = $this->destinationPath . '/' . date("Ymd");
         $this->fieldCount = (int)$ini['general']['hosts_field_count'];
         $this->retries = (int)$ini['general']['retries'];
+
+        $this->mkdir($this->destinationPath);
+        $this->mkdir($this->outputPath);
+
+        $this->logger = Logger::getLogger('backup', $this->outputPath);
 
         foreach($ini['observers'] as $name => $class) {
             if (class_exists($class)) {
