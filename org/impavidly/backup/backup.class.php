@@ -46,16 +46,7 @@ class Backup {
                     }
                     $cfg = array(
                         'observerClasses' => $this->observers,
-                        'ftpHost' => $data[0],
-                        'ftpPort' => $data[1],
-                        'ftpUsername' => $data[2],
-                        'ftpPassword' => $data[3],
-                        'ftpPath' => $data[4],
-                        'mysqlHost' => $data[5],
-                        'mysqlPort' => $data[6],
-                        'mysqlDatabase' => $data[7],
-                        'mysqlUser' => $data[8],
-                        'mysqlPassword' => $data[9],
+                        'data' => $data,
                         'outputPath' => $this->outputPath,
                         'destinationPath' => $this->destinationPath,
                         'wgetPath' => $this->wgetPath,
