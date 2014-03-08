@@ -27,9 +27,9 @@ class Backup {
 
         if (!(self::$instances[$name = md5($iniFile)] instanceof Backup)) {
             self::$instances[$name] = new Backup();
+            self::$instances[$name]->logger = Logger::getLogger('backup', self::$instances[$name]->outputPath);
             self::$instances[$name]->iniFile = $iniFile;
             self::$instances[$name]->prepare();
-            self::$instances[$name]->logger = Logger::getLogger('backup', self::$instances[$name]->outputPath);
         }
 
         return self::$instances[$name];
@@ -99,7 +99,11 @@ class Backup {
         $this->retries = (int)$ini['general']['retries'];
 
         foreach($ini['observers'] as $name => $class) {
-            $this->observers[$name] = $class;
+            if (class_exists($class)) {
+                $this->observers[$name] = $class;
+            } else {
+                $this->logger->error("The observer class '{$class}' was not found, skipping.");
+            }
         }
 
         foreach($ini['hosts'] as $hosts) {
