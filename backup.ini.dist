@@ -1,5 +1,6 @@
 [general]
 retries = 3
+hosts_field_count = 10
 
 [paths]
 wget = /usr/bin/wget

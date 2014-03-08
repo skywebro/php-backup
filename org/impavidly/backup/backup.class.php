@@ -16,6 +16,7 @@ class Backup {
     protected $retries = 3;
     protected $logger = null;
     protected $observers = array();
+    protected $fieldCount = 0;
 
     public static function factory($iniFile) {
         if (empty($iniFile)) {
@@ -39,7 +40,7 @@ class Backup {
             $lineNumber = 1;
             if (false !== ($handle = fopen($hostsFile, "r"))) {
                 while (false !== ($data = fgetcsv($handle, 1024, ","))) {
-                    if (10 != count($data)) {
+                    if ($this->fieldCount != count($data)) {
                         $this->logger->error("Line {$lineNumber} from '{$hostsFile}' does not have 10 fields");
                         $lineNumber++;
                         continue;
@@ -92,6 +93,7 @@ class Backup {
         $this->wgetPath = $ini['paths']['wget'];
         $this->mysqlDumpPath = $ini['paths']['mysqldump'];
         $this->destinationPath = $ini['paths']['destination'];
+        $this->fieldCount = (int)$ini['general']['hosts_field_count'];
         $this->retries = (int)$ini['general']['retries'];
 
         foreach($ini['observers'] as $name => $class) {
