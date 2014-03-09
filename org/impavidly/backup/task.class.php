@@ -62,11 +62,11 @@ class Task implements \SplSubject {
     }
 
     protected function attachObservers() {
-        foreach($this->observerClasses as $name => $class) {
+        foreach($this->observerClasses as $class) {
             if (class_exists($class)) {
                 $this->attach($observer = new $class());
             } else {
-                $this->logger->error("Class '{$class}' was not found, skipping.");
+                $this->logger->error("The observer class '{$class}' was not found");
             }
         }
     }

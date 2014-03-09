@@ -3,6 +3,8 @@ namespace Org\Impavidly\Backup;
 
 class Logger extends \Logger {
     public static function getLogger($name, $path) {
+        $pattern = '%d{ISO8601} [%p]: %m %n';
+
         parent::configure(array(
             'rootLogger' => array(
                 'appenders' => array('default', 'console'),
@@ -13,7 +15,7 @@ class Logger extends \Logger {
                     'layout' => array(
                         'class' => 'LoggerLayoutPattern',
                         'params' => array(
-                            'conversionPattern' => '%d{ISO8601} [%p]: %m %n',
+                            'conversionPattern' => $pattern,
                         ),
                     ),
                     'params' => array(
@@ -26,7 +28,7 @@ class Logger extends \Logger {
                     'layout' => array(
                         'class' => 'LoggerLayoutPattern',
                         'params' => array(
-                            'conversionPattern' => '%d{ISO8601} [%p]: %m %n',
+                            'conversionPattern' => $pattern,
                         ),
                     ),
                 )
