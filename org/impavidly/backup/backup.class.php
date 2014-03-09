@@ -89,7 +89,7 @@ class Backup {
         $this->destinationPath = $ini['paths']['destination'];
         $this->outputPath = $this->destinationPath . '/' . date("Ymd");
         $this->fieldCount = (int)$ini['general']['hosts_field_count'];
-        $this->retries = max((int)$ini['general']['retries'], 1);
+        $this->retries = max($ini['general']['retries'], 1);
         $this->loggerFromEmail = $ini['general']['email_from'];
         $this->loggerToEmail = $ini['general']['email_to'];
         
