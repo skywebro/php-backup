@@ -15,6 +15,8 @@ class Backup {
     protected $outputPath = '';
     protected $retries = 3;
     protected $logger = null;
+    protected $loggerFromEmail = '';
+    protected $loggerToEmail = '';    
     protected $observers = array();
     protected $fieldCount = 0;
     protected $custom = array();
@@ -55,6 +57,8 @@ class Backup {
                         'mysqlDumpPath' => $this->mysqlDumpPath,
                         'retries' => $this->retries,
                         'logger' => $this->logger,
+                        'loggerFromEmail' => $this->loggerFromEmail,
+                        'loggerToEmail' => $this->loggerToEmail,
                         'hostsFile' => $hostsFile,
                         'lineNumber' => $lineNumber++,
                     );
@@ -86,11 +90,13 @@ class Backup {
         $this->outputPath = $this->destinationPath . '/' . date("Ymd");
         $this->fieldCount = (int)$ini['general']['hosts_field_count'];
         $this->retries = max((int)$ini['general']['retries'], 1);
-
+        $this->loggerFromEmail = $ini['general']['email_from'];
+        $this->loggerToEmail = $ini['general']['email_to'];
+        
         $this->mkdir($this->destinationPath);
         $this->mkdir($this->outputPath);
 
-        $this->logger = Logger::getLogger('backup', $this->outputPath);
+        $this->logger = Logger::getLogger('backup', $this->outputPath, $this->loggerFromEmail, $this->loggerToEmail);
 
         foreach($ini['observers'] as $name => $class) {
             if (class_exists($class)) {
