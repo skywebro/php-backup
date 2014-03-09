@@ -11,5 +11,8 @@ destination = dumps
 ftp = Org\Impavidly\Backup\Observers\Ftp
 mysqldump = Org\Impavidly\Backup\Observers\MysqlDump
 
+[custom]
+name = value
+
 [hosts]
 hosts1 = hosts

@@ -17,6 +17,7 @@ class Backup {
     protected $logger = null;
     protected $observers = array();
     protected $fieldCount = 0;
+    protected $custom = array();
 
     public static function factory($iniFile) {
         if (empty($iniFile)) {
@@ -45,8 +46,9 @@ class Backup {
                         continue;
                     }
                     $cfg = array(
-                        'observerClasses' => $this->observers,
                         'data' => $data,
+                        'custom' => $this->custom,
+                        'observerClasses' => $this->observers,
                         'outputPath' => $this->outputPath,
                         'destinationPath' => $this->destinationPath,
                         'wgetPath' => $this->wgetPath,
@@ -96,6 +98,10 @@ class Backup {
             } else {
                 throw new BackupException("The observer class '{$class}' was not found");
             }
+        }
+
+        foreach($ini['custom'] as $key => $value) {
+            $this->custom[$key] = $value;
         }
 
         foreach($ini['hosts'] as $hosts) {
