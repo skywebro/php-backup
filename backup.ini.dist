@@ -3,6 +3,10 @@
 retries = 5
 ;used for validation, how many fields the hosts files have
 hosts_field_count = 10
+;the "from" field for the email appender
+email_from = logger@impavidly.org
+;the "to" field for the email appender
+email_to = admin@example.com
 
 [paths]
 ;the path on the filesystem for the wget command, used by the ftp observer
