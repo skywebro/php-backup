@@ -29,7 +29,7 @@ Extending
 * paste this code:
 
 
-    ```
+    ```php
     <?php
     namespace Com\Example\Backup\Observers;
 
