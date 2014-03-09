@@ -49,6 +49,7 @@ class Logger extends \Logger {
                     'params' => array(
                         'to' => $to,
                         'from' => $from,
+                        'subject' => 'PHP Backup Report',
                     ),
                 ),
             )
