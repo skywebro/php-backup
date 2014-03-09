@@ -1,7 +1,6 @@
 .idea
+.directory
 hosts
 backup.ini
 dumps
 logs
-
-

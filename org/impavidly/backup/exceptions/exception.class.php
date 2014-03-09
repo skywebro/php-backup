@@ -1,5 +1,5 @@
 <?php
-namespace Org\Impavidly\Backup;
+namespace Org\Impavidly\Backup\Exceptions;
 
 class Exception extends \Exception {
     public function __construct($message, $code = 2) {

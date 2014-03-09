@@ -1,21 +1,27 @@
 <?php
 namespace Org\Impavidly\Backup;
 
+use Org\Impavidly\Backup\Exceptions\Exception as BackupException;
+
 set_time_limit(0);
 
 class Backup {
     protected static $instances = array();
     protected $iniFile = '';
-    protected $logsPath = '';
     protected $wgetPath = '';
-    protected $mysqldumpPath = '';
+    protected $mysqlDumpPath = '';
     protected $hosts = array();
     protected $destinationPath = '';
     protected $outputPath = '';
+    protected $retries = 3;
+    protected $logger = null;
+    protected $observers = array();
+    protected $fieldCount = 0;
+    protected $custom = array();
 
     public static function factory($iniFile) {
         if (empty($iniFile)) {
-            throw new Exception("Usage: backup -i ini_file", 1);
+            throw new BackupException("Usage: backup -i ini_file", 1);
         }
 
         self::checkFile($iniFile);
@@ -31,50 +37,72 @@ class Backup {
 
     public function run() {
         foreach ($this->hosts as $hostsFile) {
+            $lineNumber = 1;
             if (false !== ($handle = fopen($hostsFile, "r"))) {
                 while (false !== ($data = fgetcsv($handle, 1024, ","))) {
+                    if ($this->fieldCount != count($data)) {
+                        $this->logger->error("Line {$lineNumber} from '{$hostsFile}' does not have {$this->fieldCount} fields, skipping.");
+                        $lineNumber++;
+                        continue;
+                    }
                     $cfg = array(
-                        'ftpHost' => $data[0],
-                        'ftpUsername' => $data[1],
-                        'ftpPassword' => $data[2],
-                        'mysqlHost' => $data[0],
-                        'mysqlDatabase' => $data[3],
-                        'mysqlUser' => $data[4],
-                        'mysqlPassword' => $data[5],
-                        'logsPath' => $this->logsPath,
+                        'data' => $data,
+                        'custom' => $this->custom,
+                        'observerClasses' => $this->observers,
                         'outputPath' => $this->outputPath,
                         'destinationPath' => $this->destinationPath,
                         'wgetPath' => $this->wgetPath,
-                        'mysqldumpPath' => $this->mysqldumpPath,
+                        'mysqlDumpPath' => $this->mysqlDumpPath,
+                        'retries' => $this->retries,
+                        'logger' => $this->logger,
+                        'hostsFile' => $hostsFile,
+                        'lineNumber' => $lineNumber++,
                     );
                     $task = new Task($cfg);
                     $task->run();
+                    unset($task); //free the instance
                 }
                 fclose($handle);
+            } else {
+                $this->logger->error("Could not process the hosts file {$hostsFile}.");
             }
         }
     }
 
     protected function prepare() {
         $this->ini();
-        $this->mkdir($this->logsPath);
-        $this->mkdir($this->destinationPath);
-
-        $this->outputPath = $this->destinationPath . '/' . date("Ymd");
-        $this->mkdir($this->outputPath);
     }
 
     protected function ini() {
         if (!($ini = @parse_ini_file($this->iniFile, true))) {
-            throw new Exception('Could not parse the ini file');
+            throw new BackupException('Could not parse the ini file');
         }
 
         $this->validate($ini);
 
-        $this->logsPath = $ini['paths']['logs'];
         $this->wgetPath = $ini['paths']['wget'];
-        $this->mysqldumpPath = $ini['paths']['mysqldump'];
+        $this->mysqlDumpPath = $ini['paths']['mysqldump'];
         $this->destinationPath = $ini['paths']['destination'];
+        $this->outputPath = $this->destinationPath . '/' . date("Ymd");
+        $this->fieldCount = (int)$ini['general']['hosts_field_count'];
+        $this->retries = max((int)$ini['general']['retries'], 1);
+
+        $this->mkdir($this->destinationPath);
+        $this->mkdir($this->outputPath);
+
+        $this->logger = Logger::getLogger('backup', $this->outputPath);
+
+        foreach($ini['observers'] as $name => $class) {
+            if (class_exists($class)) {
+                $this->observers[$name] = $class;
+            } else {
+                throw new BackupException("The observer class '{$class}' was not found");
+            }
+        }
+
+        foreach($ini['custom'] as $key => $value) {
+            $this->custom[$key] = $value;
+        }
 
         foreach($ini['hosts'] as $hosts) {
             $this->checkFile($hosts);
@@ -83,19 +111,19 @@ class Backup {
     }
 
     protected function validate($ini) {
-        static $values = array('logs', 'wget', 'mysqldump', 'destination');
+        static $values = array('wget', 'mysqldump', 'destination');
 
         if (!is_array($ini['hosts'])) {
-            throw new Exception('The [hosts] section is not defined in the ini file');
+            throw new BackupException('The [hosts] section is not defined in the ini file');
         }
 
         if (!is_array($ini['paths'])) {
-            throw new Exception('The [paths] section is not defined in the ini file');
+            throw new BackupException('The [paths] section is not defined in the ini file');
         }
 
         foreach($values as $value) {
             if (!array_key_exists($value, $ini['paths'])) {
-                throw new Exception("{$value} is not defined in the ini file");
+                throw new BackupException("{$value} is not defined in the ini file");
             }
         }
 
@@ -108,22 +136,22 @@ class Backup {
     protected function mkdir($dir) {
         if (is_dir($dir)) {
             if (!is_writable($dir)) {
-                throw new Exception("$dir is not writable");
+                throw new BackupException("$dir is not writable");
             }
         } elseif (!@mkdir($dir, DIRECTORY_MASK, true)) {
-            throw new Exception("Could not create $dir");
+            throw new BackupException("Could not create $dir");
         }
     }
 
     protected function checkFile($name) {
         if (!is_file($name) || !is_readable($name)) {
-            throw new Exception("$name does not exist or it's not readable");
+            throw new BackupException("$name does not exist or it's not readable");
         }
     }
 
     protected function checkExecutable($cmd) {
         if (!is_executable($this->wgetPath)) {
-            throw new Exception("$cmd is not executable");
+            throw new BackupException("$cmd is not executable");
         }
     }
 }

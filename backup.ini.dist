@@ -1,8 +1,26 @@
+[general]
+;how many times the observer will retry the job before giving up
+retries = 5
+;used for validation, how many fields the hosts files have
+hosts_field_count = 10
+
 [paths]
+;the path on the filesystem for the wget command, used by the ftp observer
 wget = /usr/bin/wget
+;the path on the filesystem for the mysqldump command, used by the mysqldump observer
 mysqldump = /usr/bin/mysqldump
-logs = logs/
-destination = dumps/
+;the directory where the observers store the files
+destination = dumps
+
+[observers]
+;any number of observer classes
+ftp = Org\Impavidly\Backup\Observers\Ftp
+mysqldump = Org\Impavidly\Backup\Observers\MysqlDump
+
+[custom]
+;accessible in the observer as $subject->custom['name']
+name = value
 
 [hosts]
+;any number of csv files
 hosts1 = hosts
