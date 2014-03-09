@@ -25,7 +25,7 @@ abstract class Common implements \SplObserver {
         } while (++$retries <= $subject->retries);
 
         if ($retries > $subject->retries) {
-            $error = $this->name . ': maximum number of retries reached in "' . $subject->hostsFile . '" line #' . $subject->lineNumber . ', giving up.';
+            $error = $this->name . ': maximum number of retries (' . $subject->retries . ') reached in "' . $subject->hostsFile . '" line #' . $subject->lineNumber . ', giving up.';
             $subject->logger->error($error);
             throw new Fail_Exception($error);
         }
