@@ -85,7 +85,7 @@ class Backup {
         $this->destinationPath = $ini['paths']['destination'];
         $this->outputPath = $this->destinationPath . '/' . date("Ymd");
         $this->fieldCount = (int)$ini['general']['hosts_field_count'];
-        $this->retries = (int)$ini['general']['retries'];
+        $this->retries = max((int)$ini['general']['retries'], 1);
 
         $this->mkdir($this->destinationPath);
         $this->mkdir($this->outputPath);
