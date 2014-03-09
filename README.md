@@ -29,6 +29,7 @@ Extending
 * paste this code:
 
 
+    ```
     <?php
     namespace Com\Example\Backup\Observers;
 
@@ -39,6 +40,7 @@ Extending
             //do your thing here
         }
     }
+    ```
 * add the observer class to the "observers" section of the ini file:
     `custom = Com\Example\Backup\Observers\Custom`
 * run the command: `./php-backup -i backup.ini`
