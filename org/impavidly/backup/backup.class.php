@@ -94,7 +94,7 @@ class Backup {
             if (class_exists($class)) {
                 $this->observers[$name] = $class;
             } else {
-                $this->logger->error("The observer class '{$class}' was not found, skipping.");
+                throw new BackupException("The observer class '{$class}' was not found");
             }
         }
 
