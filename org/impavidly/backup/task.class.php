@@ -66,7 +66,7 @@ class Task implements \SplSubject {
             if (class_exists($class)) {
                 $this->attach($observer = new $class());
             } else {
-                $this->logger->warn("The observer class '{$class}' was not found");
+                $this->logger->warn("The observer class '{$class}' was not found, skipping.");
             }
         }
     }
