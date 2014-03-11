@@ -46,7 +46,6 @@ Extending
 * add your configuration in a new ini section, something like
     ```    
     [custom]
-
     name = value
     ```
     accessible in the observer as `$subject->config['custom']['name']`
