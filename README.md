@@ -47,7 +47,6 @@ Extending
 
     ```
     [custom]
-
     name = value
     ```
 
