@@ -4,9 +4,9 @@ retries = 5
 ;used for validation, how many fields the hosts files have
 hosts_field_count = 10
 ;the "from" field for the email appender
-email_from = logger@impavidly.org
+email_from = foo@bar.com
 ;the "to" field for the email appender
-email_to = andi@impavidly.org
+email_to = foo@bar.com
 ;the directory where the observers store the files
 destination = dumps
 
