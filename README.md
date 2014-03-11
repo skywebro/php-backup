@@ -41,6 +41,27 @@ Extending
         }
     }
     ```
+
+    You might want to extend the `Common` class which already has implemented an `execute` method:
+
+    ```php
+    <?php
+    namespace Com\Example\Backup\Observers;
+    
+    use Org\Impavidly\Backup\Observers\Common;
+
+    class Custom extends Common {
+        protected $name = 'Custom Observer';
+
+        public function update(\SplSubject $subject) {
+            $command = "<some command>";
+            $status = $this->execute($subject, $command);
+            
+            return $status;
+        }
+    }
+    ```    
+    
 * add the observer class to the "observers" section of the ini file:
     `custom = Com\Example\Backup\Observers\Custom`
 * add your configuration in a new ini section, something like
