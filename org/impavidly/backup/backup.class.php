@@ -7,7 +7,8 @@ set_time_limit(0);
 
 class Backup {
     protected static $instances = array();
-    protected $iniFile = '';
+    protected $iniFileName = '';
+    protected $config = array();
     protected $wgetPath = '';
     protected $mysqlDumpPath = '';
     protected $hosts = array();
@@ -21,16 +22,16 @@ class Backup {
     protected $fieldCount = 0;
     protected $custom = array();
 
-    public static function factory($iniFile) {
-        if (empty($iniFile)) {
+    public static function factory($iniFileName) {
+        if (empty($iniFileName)) {
             throw new BackupException("Usage: backup -i ini_file", 1);
         }
 
-        self::checkFile($iniFile);
+        self::checkFile($iniFileName);
 
-        if (!(self::$instances[$name = md5($iniFile)] instanceof Backup)) {
+        if (!(self::$instances[$name = md5($iniFileName)] instanceof Backup)) {
             self::$instances[$name] = new Backup();
-            self::$instances[$name]->iniFile = $iniFile;
+            self::$instances[$name]->iniFileName = $iniFileName;
             self::$instances[$name]->prepare();
         }
 
@@ -49,12 +50,10 @@ class Backup {
                     }
                     $cfg = array(
                         'data' => $data,
-                        'custom' => $this->custom,
+                        'config' => $this->config,
                         'observerClasses' => $this->observers,
                         'outputPath' => $this->outputPath,
                         'destinationPath' => $this->destinationPath,
-                        'wgetPath' => $this->wgetPath,
-                        'mysqlDumpPath' => $this->mysqlDumpPath,
                         'retries' => $this->retries,
                         'logger' => $this->logger,
                         'loggerFromEmail' => $this->loggerFromEmail,
@@ -78,15 +77,13 @@ class Backup {
     }
 
     protected function ini() {
-        if (!($ini = @parse_ini_file($this->iniFile, true))) {
+        if (!($ini = @parse_ini_file($this->iniFileName, true))) {
             throw new BackupException('Could not parse the ini file');
         }
 
         $this->validate($ini);
 
-        $this->wgetPath = $ini['paths']['wget'];
-        $this->mysqlDumpPath = $ini['paths']['mysqldump'];
-        $this->destinationPath = $ini['paths']['destination'];
+        $this->destinationPath = $ini['general']['destination'];
         $this->outputPath = $this->destinationPath . '/' . date("Ymd");
         $this->fieldCount = (int)$ini['general']['hosts_field_count'];
         $this->retries = max($ini['general']['retries'], 1);
@@ -106,35 +103,26 @@ class Backup {
             }
         }
 
-        foreach($ini['custom'] as $key => $value) {
-            $this->custom[$key] = $value;
-        }
-
         foreach($ini['hosts'] as $hosts) {
             $this->checkFile($hosts);
             $this->hosts[] = $hosts;
         }
+        
+        $this->config = $ini;
     }
 
     protected function validate($ini) {
-        static $values = array('wget', 'mysqldump', 'destination');
+        if (!is_array($ini['general'])) {
+            throw new BackupException('The [general] section is not defined in the ini file');
+        }
+
+        if (!is_array($ini['observers'])) {
+            throw new BackupException('The [observers] section is not defined in the ini file');
+        }
 
         if (!is_array($ini['hosts'])) {
             throw new BackupException('The [hosts] section is not defined in the ini file');
         }
-
-        if (!is_array($ini['paths'])) {
-            throw new BackupException('The [paths] section is not defined in the ini file');
-        }
-
-        foreach($values as $value) {
-            if (!array_key_exists($value, $ini['paths'])) {
-                throw new BackupException("{$value} is not defined in the ini file");
-            }
-        }
-
-        $this->checkFile($ini['paths']['wget']) && $this->checkExecutable($ini['paths']['wget']);
-        $this->checkFile($ini['paths']['mysqldump']) && $this->checkExecutable($ini['paths']['mysqldump']);
 
         return true;
     }

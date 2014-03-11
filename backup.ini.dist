@@ -6,13 +6,7 @@ hosts_field_count = 10
 ;the "from" field for the email appender
 email_from = logger@impavidly.org
 ;the "to" field for the email appender
-email_to = admin@example.com
-
-[paths]
-;the path on the filesystem for the wget command, used by the ftp observer
-wget = /usr/bin/wget
-;the path on the filesystem for the mysqldump command, used by the mysqldump observer
-mysqldump = /usr/bin/mysqldump
+email_to = andi@impavidly.org
 ;the directory where the observers store the files
 destination = dumps
 
@@ -21,9 +15,13 @@ destination = dumps
 ftp = Org\Impavidly\Backup\Observers\Ftp
 mysqldump = Org\Impavidly\Backup\Observers\MysqlDump
 
-[custom]
-;accessible in the observer as $subject->custom['name']
-name = value
+[ftp]
+;the path on the filesystem for the wget command, used by the ftp observer
+wget = /usr/bin/wget
+
+[mysqldump]
+;the path on the filesystem for the mysqldump command, used by the mysqldump observer
+mysqldump = /usr/bin/mysqldump
 
 [hosts]
 ;any number of csv files
