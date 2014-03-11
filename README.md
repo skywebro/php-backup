@@ -44,6 +44,7 @@ Extending
 * add the observer class to the "observers" section of the ini file:
     `custom = Com\Example\Backup\Observers\Custom`
 * add your configuration in a new ini section, something like
+
     ```
     [custom]
 
