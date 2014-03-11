@@ -48,6 +48,7 @@ Extending
     [custom]
 
     name = value
+
     ```
     accessible in the observer as `$subject->config['custom']['name']`
 * run the command: `./php-backup -i backup.ini`
