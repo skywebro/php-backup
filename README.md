@@ -2,7 +2,7 @@ PHP Backup
 ==========
 
 This set of scripts provide a framework for making backups using the PHP language.  
-It was developed and tested in Ubuntu using PHP 5.5.9 but it might work with lower versions. Because it uses "pcntl_fork", it does not run on Windows platforms.  
+It was developed and tested in Ubuntu using PHP 5.5.9 but it might work with lower versions. Because it uses `pcntl_fork`, it does not run on Windows platforms.  
 It supports out of the box two kind of backups: ftp using wget and mysql using mysqldump.
 
 Requirements
