@@ -14,6 +14,9 @@ destination = dumps
 ;the filesystem observer
 filesystem = Org\Impavidly\Backup\Observers\Filesystem
 
+[filesystem]
+tar = /bin/tar
+
 [hosts]
 ;any number of csv files
 filesystem1 = filesystem
