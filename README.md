@@ -29,10 +29,10 @@ This method iterates through a list of paths defined in a CSV file and it create
 
 ### Usage
 
-* cp filesystem.ini.dist filesystem.ini and edit it to suit your needs
-* cp filesystem.dist filesystem
+* `cp filesystem.ini.dist filesystem.ini` and edit it to suit your needs
+* `cp filesystem.dist filesystem`
 * edit "filesystem" and add the parent directories, each on a new line
-* run the script: ./php-backup -i filesystem.ini
+* run the script: `./php-backup -i filesystem.ini`
 
 Extending
 ---------
