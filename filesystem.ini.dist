@@ -1,0 +1,20 @@
+[general]
+;how many times the observer will retry the job before giving up
+retries = 5
+;used for validation, how many fields the hosts files have
+hosts_field_count = 1
+;the "from" field for the email appender
+email_from = logger@bar.org
+;the "to" field for the email appender
+email_to = foo@bar.org
+;the directory where the observers store the files
+destination = dumps
+
+[observers]
+;the filesystem observer
+filesystem = Org\Impavidly\Backup\Observers\Filesystem
+
+[hosts]
+;any number of csv files
+filesystem1 = filesystem
+

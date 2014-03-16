@@ -14,12 +14,25 @@ Requirements
 
 Usage
 -----
+
+* prepare the script: `chmod +x php-backup`
 * prepare the ini and the hosts file
-    * `chmod +x php-backup`
     * `cp backup.ini.dist backup.ini`
     * `touch hosts`
     * add the ftp and mysql login information in your hosts file
 * run the command: `./php-backup -i backup.ini`
+
+Filesystem backup
+-----------------
+
+This method iterates through a list of paths defined in a CSV file and it creates archives of each children directories.
+
+### Usage
+
+* cp filesystem.ini.dist filesystem.ini and edit it to suit your needs
+* cp filesystem.dist filesystem
+* edit "filesystem" and add the parent directories, each on a new line
+* run the script: ./php-backup -i filesystem.ini
 
 Extending
 ---------

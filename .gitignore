@@ -4,3 +4,5 @@ hosts
 backup.ini
 dumps
 logs
+filesystem
+filesystem.ini
