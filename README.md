@@ -25,7 +25,7 @@ Usage
 Filesystem backup
 -----------------
 
-This method iterates through a list of paths defined in a CSV file and it creates archives of each children directories.
+This method iterates through a list of paths defined in a CSV file and it creates archives of each children directories (useful when you have all projects in the same directory).
 
 ### Usage
 
