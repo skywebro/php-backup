@@ -16,16 +16,16 @@ abstract class Common implements \SplObserver {
         $status = -1;
 
         do {
-            $subject->logger->info("{$this->name}: executing line #{$subject->lineNumber} from file '{$subject->hostsFile}' retry #{$retries}");
+            $subject->logger->info("{$this->name}: executing line #{$subject->lineNumber} from file '{$subject->csvFile}' retry #{$retries}");
             system($command, $status);
             if (0 == $status) {
-                $subject->logger->info("{$this->name}: done executing line #{$subject->lineNumber} from file '{$subject->hostsFile}'");
+                $subject->logger->info("{$this->name}: done executing line #{$subject->lineNumber} from file '{$subject->csvFile}'");
                 break;
             }
         } while (++$retries <= $subject->retries);
 
         if ($retries > $subject->retries) {
-            $error = $this->name . ': maximum number of retries (' . $subject->retries . ') reached in "' . $subject->hostsFile . '" line #' . $subject->lineNumber . ', giving up.';
+            $error = $this->name . ': maximum number of retries (' . $subject->retries . ') reached in "' . $subject->csvFile . '" line #' . $subject->lineNumber . ', giving up.';
             $subject->logger->error($error);
             throw new Fail_Exception($error);
         }

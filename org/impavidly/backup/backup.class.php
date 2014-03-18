@@ -11,7 +11,7 @@ class Backup {
     protected $config = array();
     protected $wgetPath = '';
     protected $mysqlDumpPath = '';
-    protected $hosts = array();
+    protected $csv = array();
     protected $destinationPath = '';
     protected $outputPath = '';
     protected $retries = 3;
@@ -39,12 +39,12 @@ class Backup {
     }
 
     public function run() {
-        foreach ($this->hosts as $hostsFile) {
+        foreach ($this->csv as $csvFile) {
             $lineNumber = 1;
-            if (false !== ($handle = fopen($hostsFile, "r"))) {
+            if (false !== ($handle = fopen($csvFile, "r"))) {
                 while (false !== ($data = fgetcsv($handle, 1024, ","))) {
                     if ($this->fieldCount != count($data)) {
-                        $this->logger->warn("Line {$lineNumber} from '{$hostsFile}' does not have {$this->fieldCount} fields, skipping.");
+                        $this->logger->warn("Line {$lineNumber} from '{$csvFile}' does not have {$this->fieldCount} fields, skipping.");
                         $lineNumber++;
                         continue;
                     }
@@ -58,7 +58,7 @@ class Backup {
                         'logger' => $this->logger,
                         'loggerFromEmail' => $this->loggerFromEmail,
                         'loggerToEmail' => $this->loggerToEmail,
-                        'hostsFile' => $hostsFile,
+                        'csvFile' => $csvFile,
                         'lineNumber' => $lineNumber++,
                     );
                     $task = new Task($cfg);
@@ -67,7 +67,7 @@ class Backup {
                 }
                 fclose($handle);
             } else {
-                $this->logger->error("Could not process the hosts file {$hostsFile}.");
+                $this->logger->error("Could not process the csv file {$csvFile}.");
             }
         }
     }
@@ -85,7 +85,7 @@ class Backup {
 
         $this->destinationPath = $ini['general']['destination'];
         $this->outputPath = $this->destinationPath . '/' . date("Ymd");
-        $this->fieldCount = (int)$ini['general']['hosts_field_count'];
+        $this->fieldCount = (int)$ini['general']['csv_field_count'];
         $this->retries = max($ini['general']['retries'], 1);
         $this->loggerFromEmail = $ini['general']['email_from'];
         $this->loggerToEmail = $ini['general']['email_to'];
@@ -103,9 +103,9 @@ class Backup {
             }
         }
 
-        foreach($ini['hosts'] as $hosts) {
-            $this->checkFile($hosts);
-            $this->hosts[] = $hosts;
+        foreach($ini['csv'] as $csv) {
+            $this->checkFile($csv);
+            $this->csv[] = $csv;
         }
         
         $this->config = $ini;
@@ -120,8 +120,8 @@ class Backup {
             throw new BackupException('The [observers] section is not defined in the ini file');
         }
 
-        if (!is_array($ini['hosts'])) {
-            throw new BackupException('The [hosts] section is not defined in the ini file');
+        if (!is_array($ini['csv'])) {
+            throw new BackupException('The [csv] section is not defined in the ini file');
         }
 
         return true;
@@ -144,7 +144,7 @@ class Backup {
     }
 
     protected function checkExecutable($cmd) {
-        if (!is_executable($this->wgetPath)) {
+        if (!is_executable($cmd)) {
             throw new BackupException("$cmd is not executable");
         }
     }

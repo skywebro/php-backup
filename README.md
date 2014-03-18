@@ -16,7 +16,7 @@ Usage
 -----
 
 * prepare the script: `chmod +x php-backup`
-* prepare the ini and the hosts file
+* prepare the ini and the csv file
     * `cp backup.ini.dist backup.ini`
     * `touch hosts`
     * add the ftp and mysql login information in your hosts file

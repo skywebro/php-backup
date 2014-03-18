@@ -1,8 +1,8 @@
 [general]
 ;how many times the observer will retry the job before giving up
 retries = 5
-;used for validation, how many fields the hosts files have
-hosts_field_count = 1
+;used for validation, how many fields the csv files have
+csv_field_count = 1
 ;the "from" field for the email appender
 email_from = logger@bar.org
 ;the "to" field for the email appender
@@ -17,7 +17,7 @@ filesystem = Org\Impavidly\Backup\Observers\Filesystem
 [filesystem]
 tar = /bin/tar
 
-[hosts]
+[csv]
 ;any number of csv files
 filesystem1 = filesystem
 
