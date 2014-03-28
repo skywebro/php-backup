@@ -43,7 +43,7 @@ This method reads a CSV file with records made out of a path to a project and th
 
 * `cp directories_and_mysql.ini.dist directories_and_mysql.ini` and edit it to suit your needs
 * `cp directories_and_mysql.dist directories_and_mysql`
-* edit `directories_and_mysql` and add the project directories and the mysql info on the same line
+* edit `directories_and_mysql` and add the project directory and the mysql info on the same line
 * run the script: `./php-backup -i directories_and_mysql.ini`
 
 Extending
