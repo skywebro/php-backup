@@ -1,8 +1,6 @@
 [general]
 ;how many times the observer will retry the job before giving up
 retries = 5
-;used for validation, how many fields the csv files have
-csv_field_count = 1
 ;the "from" field for the email appender
 email_from = logger@bar.com
 ;the "to" field for the email appender
