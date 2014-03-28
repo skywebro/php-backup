@@ -5,7 +5,8 @@ class Ftp extends Common {
     protected $name = 'FTP Observer';
 
     public function update(\SplSubject $subject) {
-        $command = "{$subject->config['ftp']['wget']} --continue --mirror --directory-prefix={$subject->outputPath} ftp://{$subject->data[2]}:{$subject->data[3]}@{$subject->data[0]}:{$subject->data[1]}/{$subject->data[4]} 2> {$subject->outputPath}/{$subject->data[0]}_{$subject->data[2]}.log";
+        $data = $this->getCsvRecord($subject->data, $subject->config['ftp']['csv_fields_indexes']);
+        $command = "{$subject->config['ftp']['wget']} --continue --mirror --directory-prefix={$subject->outputPath} ftp://{$data[2]}:{$data[3]}@{$data[0]}:{$data[1]}/{$data[4]} 2> {$subject->outputPath}/{$data[0]}_{$data[2]}.log";
         $status = $this->execute($subject, $command);
 
         return $status;

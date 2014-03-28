@@ -43,11 +43,6 @@ class Backup {
             $lineNumber = 1;
             if (false !== ($handle = fopen($csvFile, "r"))) {
                 while (false !== ($data = fgetcsv($handle, 1024, ","))) {
-                    if ($this->fieldCount != count($data)) {
-                        $this->logger->warn("Line {$lineNumber} from '{$csvFile}' does not have {$this->fieldCount} fields, skipping.");
-                        $lineNumber++;
-                        continue;
-                    }
                     $cfg = array(
                         'data' => $data,
                         'config' => $this->config,

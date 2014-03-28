@@ -7,6 +7,17 @@ use Org\Impavidly\Backup\Exceptions\Fail_Exception;
 abstract class Common implements \SplObserver {
     protected $name = 'Not implemented';
 
+    public function getCsvRecord($data, $indexes) {
+        $indexesArray = explode(',', $indexes);
+        $return = array();
+
+        foreach($indexesArray as $index) {
+            $return[] = $data[trim($index)];
+        }
+        
+        return $return;
+    }
+    
     public function update(\SplSubject $subject) {
         throw new BackupException('Not implemented.');
     }

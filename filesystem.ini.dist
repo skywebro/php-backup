@@ -4,9 +4,9 @@ retries = 5
 ;used for validation, how many fields the csv files have
 csv_field_count = 1
 ;the "from" field for the email appender
-email_from = logger@bar.org
+email_from = logger@bar.com
 ;the "to" field for the email appender
-email_to = foo@bar.org
+email_to = admin@bar.com
 ;the directory where the observers store the files
 destination = dumps
 
@@ -16,8 +16,9 @@ filesystem = Org\Impavidly\Backup\Observers\Filesystem
 
 [filesystem]
 tar = /bin/tar
+;the position of the filesystem fields in the csv file
+csv_fields_indexes = 0
 
 [csv]
 ;any number of csv files
 filesystem1 = filesystem
-

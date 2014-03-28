@@ -5,7 +5,8 @@ class Filesystem extends Common {
     protected $name = 'Filesystem Observer';
 
     public function update(\SplSubject $subject) {
-        $path = $subject->data[0];        
+        $data = $this->getCsvRecord($subject->data, $subject->config['filesystem']['csv_fields_indexes']);
+        $path = $data[0];
         $status = 0;
         
         try {
