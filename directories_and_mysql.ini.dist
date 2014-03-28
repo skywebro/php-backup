@@ -10,21 +10,20 @@ destination = dumps
 
 [observers]
 ;any number of observer classes
-ftp = Org\Impavidly\Backup\Observers\Ftp
+directories = Org\Impavidly\Backup\Observers\Directories
 mysqldump = Org\Impavidly\Backup\Observers\MysqlDump
 
-[ftp]
-;the path on the filesystem for the wget command, used by the ftp observer
-wget = /usr/bin/wget
-;the position of the ftp fields in the csv file
-csv_fields_indexes = 0, 1, 2, 3, 4
+[directories]
+tar = /bin/tar
+;the position of the filesystem fields in the csv file
+csv_fields_indexes = 0
 
 [mysqldump]
 ;the path on the filesystem for the mysqldump command, used by the mysqldump observer
 mysqldump = /usr/bin/mysqldump
 ;the position of the mysqldump fields in the csv file
-csv_fields_indexes = 5, 6, 7, 8, 9
+csv_fields_indexes = 1, 2, 3, 4, 5
 
 [csv]
 ;any number of csv files
-csv1 = hosts
+csv1 = directories_and_mysql

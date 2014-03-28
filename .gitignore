@@ -6,3 +6,5 @@ dumps
 logs
 filesystem
 filesystem.ini
+directories_and_mysql.ini
+directories_and_mysql

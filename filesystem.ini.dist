@@ -19,4 +19,4 @@ csv_fields_indexes = 0
 
 [csv]
 ;any number of csv files
-filesystem1 = filesystem
+csv1 = filesystem
