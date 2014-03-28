@@ -31,8 +31,20 @@ This method iterates through a list of paths defined in a CSV file and it create
 
 * `cp filesystem.ini.dist filesystem.ini` and edit it to suit your needs
 * `cp filesystem.dist filesystem`
-* edit "filesystem" and add the parent directories, each on a new line
+* edit `filesystem` and add the parent directories, each on a new line
 * run the script: `./php-backup -i filesystem.ini`
+
+Directories and MySQL backup
+----------------------------
+
+This method reads a CSV file with records made out of a path to a project and the mysql info for that project.
+
+### Usage
+
+* `cp directories_and_mysql.ini.dist directories_and_mysql.ini` and edit it to suit your needs
+* `cp directories_and_mysql.dist directories_and_mysql`
+* edit `directories_and_mysql` and add the project directories and the mysql info on the same line
+* run the script: `./php-backup -i directories_and_mysql.ini`
 
 Extending
 ---------
