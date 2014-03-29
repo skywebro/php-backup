@@ -15,7 +15,7 @@ mysqldump = Org\Impavidly\Backup\Observers\MysqlDump
 
 [directory]
 tar = /bin/tar
-;the position of the filesystem fields in the csv file
+;the position of the directory field in the csv file
 csv_fields_indexes = 0
 
 [mysqldump]
