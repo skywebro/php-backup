@@ -3,11 +3,11 @@ namespace Org\Impavidly\Backup\Observers;
 
 use Org\Impavidly\Backup\Exceptions\Fail_Exception;
 
-class Directories extends Common {
-    protected $name = 'Directories Observer';
+class Directory extends Common {
+    protected $name = 'Directory Observer';
 
     public function update(\SplSubject $subject) {
-        $data = $this->getCsvRecord($subject->data, $subject->config['directories']['csv_fields_indexes']);
+        $data = $this->getCsvRecord($subject->data, $subject->config['directory']['csv_fields_indexes']);
         $status = -1;
                 
         try {
@@ -17,7 +17,7 @@ class Directories extends Common {
             }
             
             $archiveName = $subject->outputPath . DIRECTORY_SEPARATOR . str_replace(DIRECTORY_SEPARATOR, '_', trim($data[0], DIRECTORY_SEPARATOR)) . '.tar.bz2';
-            $command = "{$subject->config['directories']['tar']} -jcf $archiveName --directory=" . $data[0] . " .";
+            $command = "{$subject->config['directory']['tar']} -jcf $archiveName --directory=" . $data[0] . " .";
             $subject->logger->info("{$this->name}: running {$command}");
             $status = $this->execute($subject, $command);
         } catch (Fail_Exception $e) {

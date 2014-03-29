@@ -10,10 +10,10 @@ destination = dumps
 
 [observers]
 ;any number of observer classes
-directories = Org\Impavidly\Backup\Observers\Directories
+directory = Org\Impavidly\Backup\Observers\Directory
 mysqldump = Org\Impavidly\Backup\Observers\MysqlDump
 
-[directories]
+[directory]
 tar = /bin/tar
 ;the position of the filesystem fields in the csv file
 csv_fields_indexes = 0
