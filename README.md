@@ -46,6 +46,18 @@ This method reads a CSV file with records made out of a path to a project and th
 * edit `directories_and_mysql` and add the project directory and the mysql info on the same line
 * run the script: `./php-backup -i directories_and_mysql.ini`
 
+SSH and MySQL backup
+----------------------------
+
+This method reads a CSV file with records made out of ssh login info and the project path on the server together with the mysql info for that project.
+
+### Usage
+
+* `cp ssh_and_mysql.ini.dist ssh_and_mysql.ini` and edit it to suit your needs
+* `cp ssh_and_mysql.dist ssh_and_mysql`
+* edit `ssh_and_mysql` and add the ssh info and the mysql info on the same line
+* run the script: `./php-backup -i ssh_and_mysql.ini`
+
 Extending
 ---------
 * create your namespace: `mkdir -p com/example/backup/observers`
