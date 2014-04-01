@@ -6,5 +6,7 @@ dumps
 logs
 filesystem
 filesystem.ini
-directories_and_mysql.ini
 directories_and_mysql
+directories_and_mysql.ini
+ssh_and_mysql
+ssh_and_mysql.ini

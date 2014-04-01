@@ -1,0 +1,31 @@
+[general]
+;how many times the observer will retry the job before giving up
+retries = 5
+;the "from" field for the email appender
+email_from = logger@bar.com
+;the "to" field for the email appender
+email_to = admin@bar.com
+;the directory where the observers store the files
+destination = dumps
+
+[observers]
+;any number of observer classes
+ssh = Org\Impavidly\Backup\Observers\Ssh
+mysqldump = Org\Impavidly\Backup\Observers\MysqlDump
+
+[ssh]
+scp = /usr/bin/scp
+;apt-get install sshpass
+sshpass = /usr/bin/sshpass
+;the position of the ssh fields in the csv file
+csv_fields_indexes = 0, 1, 2, 3, 4
+
+[mysqldump]
+;the path on the filesystem for the mysqldump command, used by the mysqldump observer
+mysqldump = /usr/bin/mysqldump
+;the position of the mysqldump fields in the csv file
+csv_fields_indexes = 5, 6, 7, 8, 9
+
+[csv]
+;any number of csv files
+csv1 = ssh_and_mysql
