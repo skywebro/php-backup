@@ -74,6 +74,8 @@ This method reads a CSV file with records made out of ssh login info and the pro
 * edit `ssh_and_mysql` and add the ssh info and the mysql info on the same line
 * run the script: `./php-backup -i ssh_and_mysql.ini`
 
+**Note**: You can combine the observers in the ini file as you see fit.
+
 Extending
 ---------
 * create your namespace: `mkdir -p com/example/backup/observers`
