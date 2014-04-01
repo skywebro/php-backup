@@ -9,8 +9,11 @@ Requirements
 ------------
 
 * PHP 5.5.9 on *nix platform (it might work with lower PHP versions)
-* the wget command
-* the mysqldump command
+* the tar and bzip2 commands used by the directory and filesystem observers;
+* the wget command used by the ftp observer;
+* the mysqldump command used by the mysqldump observer;
+* the scp and sshpass commands used by the ssh observer;
+* the pg_dump command used by the psql observer;
 
 Usage
 -----
@@ -45,6 +48,19 @@ This method reads a CSV file with records made out of a path to a project and th
 * `cp directories_and_mysql.dist directories_and_mysql`
 * edit `directories_and_mysql` and add the project directory and the mysql info on the same line
 * run the script: `./php-backup -i directories_and_mysql.ini`
+
+
+Directories and PostgreSQL backup
+----------------------------
+
+This method reads a CSV file with records made out of a path to a project and the postgresql info for that project.
+
+### Usage
+
+* `cp directories_and_postgresql.ini.dist directories_and_postgresql.ini` and edit it to suit your needs
+* `cp directories_and_postgresql.dist directories_and_postgresql`
+* edit `directories_and_mysql` and add the project directory and the postgresql info on the same line
+* run the script: `./php-backup -i directories_and_postgresql.ini`
 
 SSH and MySQL backup
 ----------------------------

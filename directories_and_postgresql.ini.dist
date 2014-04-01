@@ -1,0 +1,29 @@
+[general]
+;how many times the observer will retry the job before giving up
+retries = 5
+;the "from" field for the email appender
+email_from = logger@bar.com
+;the "to" field for the email appender
+email_to = admin@bar.com
+;the directory where the observers store the files
+destination = dumps
+
+[observers]
+;any number of observer classes
+directory = Org\Impavidly\Backup\Observers\Directory
+psql = Org\Impavidly\Backup\Observers\Psql
+
+[directory]
+tar = /bin/tar
+;the position of the directory field in the csv file
+csv_fields_indexes = 0
+
+[psql]
+;the path on the filesystem for the pg_dump command, used by the psql observer
+pg_dump = /usr/bin/pg_dump
+;the position of the pg_dump fields in the csv file
+csv_fields_indexes = 1, 2, 3, 4, 5
+
+[csv]
+;any number of csv files
+csv1 = directories_and_postgresql
