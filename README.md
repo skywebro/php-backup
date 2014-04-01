@@ -15,15 +15,15 @@ Requirements
 * the scp and sshpass commands used by the ssh observer;
 * the pg_dump command used by the psql observer;
 
-Usage
------
+FTP and MySQL backup
+--------------------
 
-* prepare the script: `chmod +x php-backup`
+* make the script executable: `chmod +x php-backup`
 * prepare the ini and the csv file
-    * `cp backup.ini.dist backup.ini`
-    * `touch hosts`
-    * add the ftp and mysql login information in your hosts file
-* run the command: `./php-backup -i backup.ini`
+    * `cp ftp_and_mysql.ini.dist ftp_and_mysql.ini`
+    * `touch ftp_and_mysql`
+    * add the ftp and mysql login information in your ftp_and_mysql file
+* run the command: `./php-backup -i ftp_and_mysql.ini`
 
 Filesystem backup
 -----------------
@@ -127,4 +127,4 @@ Extending
     ```
 
     accessible in the observer as `$subject->config['custom']['name']`
-* run the command: `./php-backup -i backup.ini`
+* run the command: `./php-backup -i <some_ini_file>.ini`
