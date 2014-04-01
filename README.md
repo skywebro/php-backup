@@ -59,7 +59,7 @@ This method reads a CSV file with records made out of a path to a project and th
 
 * `cp directories_and_postgresql.ini.dist directories_and_postgresql.ini` and edit it to suit your needs
 * `cp directories_and_postgresql.dist directories_and_postgresql`
-* edit `directories_and_mysql` and add the project directory and the postgresql info on the same line
+* edit `directories_and_postgresql` and add the project directory and the postgresql info on the same line
 * run the script: `./php-backup -i directories_and_postgresql.ini`
 
 SSH and MySQL backup
