@@ -128,3 +128,10 @@ Extending
 
     accessible in the observer as `$subject->config['custom']['name']`
 * run the command: `./php-backup -i <some_ini_file>.ini`
+
+
+### Companies using PHP-Backup
+
+* http://webkoenig.ch/
+* http://agentur-am-see.ch/ 
+
